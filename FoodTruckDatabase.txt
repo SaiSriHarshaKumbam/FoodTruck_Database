@@ -1,0 +1,252 @@
+drop table punchcard_cust;
+drop table normal_cust;
+drop table orders;
+drop table customer;
+drop table menu;
+drop table employee;
+drop table inventory;
+drop table truck;
+
+--Creating table for entity Truck and Inserting Data
+
+create table truck
+(
+    truck_id int,
+    truck_location varchar(50),
+    operating_days varchar(30),
+    truck_num int,
+    truck_email varchar(100),
+    primary key (truck_id)
+);
+
+insert into truck values (101, 'beach','Monday',2, 'truck1@gmail.com' );
+insert into truck values (102, 'downtown', 'Wednesday',1, 'trcuk2@gmail.com');
+insert into truck values (103, 'downtown', 'Wednesday',1, 'trcuk3@gmail.com');
+insert into truck values (104, 'Rolling St', 'Sunday',1, 'trcuk4@gmail.com');
+select * from truck;
+
+--Creating table for entity Inventory and Inserting Data.
+
+create table inventory
+(
+    inv_id int,
+    truck_id int,
+    inv_amount float,
+    inv_worth float,
+    ingredients_available varchar(100),
+    primary key(inv_id)
+);
+
+insert into inventory values (01, 101, 152, 454, 'Lettuce');
+insert into inventory values (02, 102, 794, 985,'Cheese');
+insert into inventory values (03, 101, 453, 466,'flour');
+insert into inventory values (04, 103, 793, 678,'Corn');
+insert into inventory values (05, 104, 863, 967,'Bread');
+select * from inventory;
+
+--Creating table for entity Employee and Inserting Data.
+
+create table employee
+(
+    emp_id int,
+    emp_name varchar(50),
+    emp_email varchar(50),
+    emp_phno varchar(50),
+    emp_street varchar(30),
+    emp_city varchar(30),
+    emp_state varchar(30),
+    emp_zip int,
+    primary key(emp_id)
+);
+
+insert into employee values(1,'John','john@foodtruck.com',9876543210,'Westland','Baltimore','Maryland',21229);
+insert into employee values(2,'Rita','rita@foodtruck.com',4465789847,'Peter Rd','Newyork','Newyork',50487);
+insert into employee values(3,'George','george@foodtruck.com',6549874568,'Lords Ave','Newjersy','Newyersy',92443);
+insert into employee values(4,'Bralyon','bralyon@foodtruck.com',9847467896,'Peter Rd','Boston','Newyork',21046);
+insert into employee values(5,'Boston George','bostongeorge@foodtruck.com',7875484568,'Texas','Texas','Dallas',78942);
+select * from employee;
+
+--Creating table for entity Menu and Inserting Data
+
+create table menu
+(
+    menu_id int,
+    --item_image binary(50),
+    menuitem_name varchar(50),
+    menuitem_price float,
+    primary key(menu_id)
+);
+
+
+insert into menu values (1, 'Burger', 12.25);
+insert into menu values (2, 'Sandwich', 12.50);
+insert into menu values (3, 'Pasta', 15.25);
+insert into menu values (4, 'Panner', 7.12);
+insert into menu values (5, 'Biryani', 130);
+select * from menu;
+
+--Creating table for entity Customer and Inserting Data.
+
+create table customer(
+    cust_id int,
+    cust_name varchar(30),
+    cust_phoneNo int,
+    cust_email varchar(30),
+    cust_street varchar(30),
+    cust_city varchar(30),
+    cust_state varchar(30),
+    cust_zip int,
+    primary key(cust_id)
+);
+
+insert into customer values(1,'Harsha',9876543210,'harsha@umbc.edu','Stonecroft','Baltimore','Maryland',21229);
+insert into customer values(2,'Urrvi',8876543210,'urrvi@umbc.edu','Mallowhills','Florida','Florida',20288);
+insert into customer values(3,'Tejo',7876543210,'tejo@umbc.edu','Mountridge','Baltimore','Maryland',21230);
+insert into customer values(4,'Sacchi',46464478979,'saachi@umbc.edu','UMBC','Hilton','Texas',49720);
+select * from customer;
+
+--Creating table for entity Orders and Inserting Data.
+
+create table orders(
+    orders_id int,
+    --orders_time time,
+    orders_date date,
+    orders_amount float,
+    cust_id int,
+    --orders_status boolean not null,
+    primary key(orders_id),
+    foreign key(cust_id) references customer(cust_id)
+);
+
+insert into orders values(1,'05-May-2023',125.98,2);
+insert into orders values(2,'17-Apr-2023',7998.12,1);
+insert into orders values(3,'04-Jan-2022',4.56,4);
+insert into orders values(4,'16-Feb-2023',254,3);
+select * from orders;
+
+--Creating table for entity Normal Customer and Inserting Data
+
+create table normal_cust(
+    normalcust_id int,
+    points_acheived int,
+    cust_id int,
+    primary key(normalcust_id),
+    foreign key(cust_id) references customer(cust_id)
+);
+
+insert into normal_cust values (001,210,1);
+insert into normal_cust values (002,152, 2);
+insert into normal_cust values (003,81,3);
+insert into normal_cust values (004,5,4);
+select * from normal_cust;
+
+--Creating table for entity Punchcard Customer and Inserting Data
+
+create table punchcard_cust(
+    punchcust_id int,
+    points_available int,
+    cust_id int,
+    primary key(punchcust_id),
+    foreign key(cust_id) references customer(cust_id)
+);
+
+insert into punchcard_cust values(1,1500,1);
+insert into punchcard_cust values(2,783,2);
+insert into punchcard_cust values(4,10,2);
+insert into punchcard_cust values(3,654,3);
+
+select * from punchcard_cust;
+
+
+select * from truck;
+select * from inventory;
+select * from employee;
+select * from menu;
+select * from customer;
+select * from orders;
+select * from normal_cust;
+select * from punchcard_cust;
+
+--Query to return customer ID and Customer name who lives in “Baltimore”
+select cust_id,cust_name 
+from customer
+where cust_city='Baltimore';
+
+--Query to return Menu ID, MenuItem Name and MenuItem Price that costs greater than 12.50
+
+select menu_id, menuitem_name, menuitem_price
+from menu
+where menuitem_price>12.50; 
+
+--Query to return information of the employee who lives in Newyork
+
+select * from employee
+where emp_city='Newyork';
+
+--Query to return Order Date and Order ID of the orders which were placed after 11-Apr-2023
+
+select orders_date ,orders_id
+from orders
+where orders_date>'11-Apr-2023';
+
+--Query to return the Number of Points achieved by the customer and their respectives Id’s whose points are greater than 50
+
+select points_acheived, normalcust_id
+from normal_cust
+where points_acheived > 50;
+
+--Query to return customer contact info that contains ‘r’ in their name
+select c.cust_id,c.cust_name,c.cust_email
+from Customer c
+where cust_name like '%r%';
+
+--Query to update the inventory amount of the truck whose id is ‘102’.
+
+update inventory
+set inv_amount=250
+where truck_id=102;
+
+select * from inventory;
+--Query to update employee address with name ‘John’
+update employee
+set emp_street='Mount Ridge'
+where emp_name='John';
+select * from employee;
+--Query to update customer name and street address having id = 3.
+update customer
+set cust_name='Tejo Venkatesh',cust_street='Charles St'
+where cust_id=3;
+select * from customer;
+--Query to return the details of ingredients available in the trucks.
+SELECT c.cust_name, c.cust_phoneNo
+FROM Customer c
+JOIN normal_cust nc ON c.cust_id = nc.cust_id
+WHERE nc.points_acheived >= 50;
+
+--Query to return the details of the customer who has given specific orders.
+SELECT t.truck_id, i.ingredients_available
+FROM truck t
+join inventory i on t.truck_id=i.truck_id;
+
+--Query to return the name and phone number of customer who have achieved more than 50 points
+
+select c.cust_id, o.orders_id, c.cust_name
+from customer c 
+join orders o on c.cust_id=o.cust_id;
+
+--Query to return the number of orders given by customers
+
+SELECT c.cust_name, COUNT(o.orders_id) AS total_orders
+FROM Customer c
+JOIN Orders o ON c.cust_id = o.cust_id
+GROUP BY c.cust_name;
+
+--Query to return the total points achieved by the customers.
+
+SELECT c.cust_name, SUM(pc.points_available) AS total_points
+FROM Customer c
+JOIN punchcard_cust pc ON c.cust_id = pc.cust_id
+GROUP BY c.cust_name;
+
+
+
